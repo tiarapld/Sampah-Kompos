@@ -25,17 +25,17 @@ st.markdown("""
 st.markdown('<div class="main-title">♻️ Smart Dashboard: Klasifikasi & Estimasi Volume Sampah</div>', unsafe_allow_html=True)
 
 # ----------------------------------------------------
-# PANDUAN: KOTAK PROFIL DESA DAN MITRA DI HALAMAN DEPAN
+# OTOMATIS: KOTAK PROFIL DESA DAN MITRA DI HALAMAN DEPAN
 # ----------------------------------------------------
 st.markdown("""
     <div class="desa-box">
         <h4 style="margin-top:0; color:#1B5E20;">📍 Informasi Penelitian & Lokasi Praktek Lapangan</h4>
         <p style="margin-bottom:8px;">Aplikasi monitoring digital ini diimplementasikan untuk mendukung transparansi data kuantitatif di lokasi studi kasus:</p>
         <table style="width:100%; border:none; line-height: 1.6;">
-            <tr><td style="width:150px; font-weight:bold;">Lokasi Praktek</td><td>: Desa [Masukkan Nama Desa], Kecamatan [Kecamatan], Kabupaten [Kabupaten]</td></tr>
-            <tr><td style="font-weight:bold;">Mitra Lapangan</td><td>: [Masukkan Nama Mitra, misal: TPS3R Desa / Kelompok Tani]</td></tr>
+            <tr><td style="width:150px; font-weight:bold;">Lokasi Praktek</td><td>: Kp. Rawabebek RT.002 / RW.001, Desa Bojongpicung, Kecamatan Bojongpicung, Kabupaten Cianjur</td></tr>
+            <tr><td style="font-weight:bold;">Mitra Lapangan</td><td>: TPS3R / Masyarakat Kp. Rawabebek Desa Bojongpicung</td></tr>
             <tr><td style="font-weight:bold;">Nama Peneliti</td><td>: Tiara Putri Latifani Dianata</td></tr>
-            <tr><td style="font-weight:bold;">NIM</td><td>: [Masukkan NIM Anda]</td></tr>
+            <tr><td style="font-weight:bold;">NIM</td><td>: 20221310086</td></tr>
         </table>
     </div>
 """, unsafe_allow_html=True)
@@ -56,7 +56,7 @@ kedalaman_wadah = st.sidebar.number_input("Tinggi/Kedalaman Wadah Kompos (cm):",
 def proses_klasifikasi():
     """Simulasi Klasifikasi Berdasarkan Analisis Warna Citra Sederhana."""
     DAFTAR_KELAS = ["Daun Kering", "Sisa Sayuran", "Kulit Buah", "Ranting Pohon"]
-    return np.choice(DAFTAR_KELAS), np.random.uniform(85.0, 99.8)
+    return np.random.choice(DAFTAR_KELAS), np.random.uniform(85.0, 99.8)
 
 def estimasi_dimensi_dan_volume(img_pil, p_per_cm, tinggi_wadah):
     """Ekstraksi geometri citra menggunakan OpenCV untuk menghitung Volume Estimasi."""
@@ -116,6 +116,6 @@ with kolom_kanan:
         if hasil_kelas in ["Daun Kering", "Ranting Pohon"]:
             st.info("💡 **Rekomendasi:** Kandungan Karbon (C) tinggi. Tambahkan sampah basah kaya Nitrogen seperti sisa sayuran untuk mempercepat fermentasi.")
         else:
-            st.info("💡 **Rekomendasi:** Kandungan Nitrogen (N) tinggi. Pastikan aerasi wadah terjaga untuk menghindari bau menyengat akibat kondisi anaerob.")
+            st.info("💡 **Rekomendasi:** Kandungan Nitrogen (N) tinggi. Pastikan aerasi wadah terjaga untuk avoidance bau menyengat akibat kondisi anaerob.")
     else:
         st.info("Menunggu unggahan citra dari Grandmaster untuk memulai kalkulasi matematis.")
