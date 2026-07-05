@@ -104,7 +104,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Inisialisasi State Halaman untuk Navigasi Interaktif
-if "halaman_aktif" not  in st.session_state:
+if "halaman_aktif" not in st.session_state:
     st.session_state.halaman_aktif = "inovasi"
 
 # 1. Spanduk Utama Atas (Header Banner)
@@ -210,22 +210,29 @@ else:
             citra_asli = Image.open(file_unggah)
             st.image(citra_asli, caption="Citra Sumber dari Lapangan", use_container_width=True)
 
-with kolom_kanan:
-    if file_unggah is not None and st.session_state.halaman_aktif == "inovasi":
-        st.markdown('<div class="section-card"><h3>📊 Validasi Data & Metrik Volume</h3></div>', unsafe_allow_html=True)
-        hasil_kelas, akurasi = proses_klasifikasi()
-        citra_proses, p_cm, l_cm, vol_hitung = estimasi_dimensi_dan_volume(citra_asli, piksel_per_cm, kedalaman_wadah)
-        
-        st.subheader("1. Hasil Klasifikasi Jenis Sampah")
-        st.success(f"**Kategori Terdeteksi Pemerintah:** {hasil_kelas} ({akurasi:.2f}%)")
-        
-        st.subheader("2. Hasil Segmentasi & Dimensi Fisik")
-        st.image(citra_proses, caption="Ekstraksi Kontur Luas Area Sampah", use_container_width=True)
-        
-        metrik_1, metrik_2, metrik_3 = st.columns(3)
-        metrik_1.metric("Panjang Deteksi", f"{p_cm:.1f} cm")
-        metrik_2.metric("Lebar Deteksi", f"{l_cm:.1f} cm")
-        metrik_3.metric("Volume Estimasi", f"{vol_hitung:.5f} m³", delta_color="inverse")
-        
-        st.subheader("3. Instruksi Penanganan Kompos Mandiri")
-        if hasil_kelas in ["Daun Kering", "Ranting Pohon"]:
+    with kolom_kanan:
+        if file_unggah is not None:
+            st.markdown('<div class="section-card"><h3>📊 Validasi Data & Metrik Volume</h3></div>', unsafe_allow_html=True)
+            hasil_kelas, akurasi = proses_klasifikasi()
+            citra_proses, p_cm, l_cm, vol_hitung = estimasi_dimensi_dan_volume(citra_asli, piksel_per_cm, kedalaman_wadah)
+            
+            st.subheader("1. Hasil Klasifikasi Jenis Sampah")
+            st.success(f"**Kategori Terdeteksi Pemerintah:** {hasil_kelas} ({akurasi:.2f}%)")
+            
+            st.subheader("2. Hasil Segmentasi & Dimensi Fisik")
+            st.image(citra_proses, caption="Ekstraksi Kontur Luas Area Sampah", use_container_width=True)
+            
+            metrik_1, metrik_2, metrik_3 = st.columns(3)
+            metrik_1.metric("Panjang Deteksi", f"{p_cm:.1f} cm")
+            metrik_2.metric("Lebar Deteksi", f"{l_cm:.1f} cm")
+            metrik_3.metric("Volume Estimasi", f"{vol_hitung:.5f} m³", delta_color="inverse")
+            
+            st.subheader("3. Instruksi Penanganan Kompos Mandiri")
+            if hasil_kelas in ["Daun Kering", "Ranting Pohon"]:
+
+
+
+
+
+
+                
