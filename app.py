@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 from PIL import Image
 import os
+import random
 
 # ==========================================
 # 1. KONFIGURASI HALAMAN & THEME MODERN GRADIENT
@@ -14,7 +15,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Kustomisasi CSS untuk Latar Belakang Modern (Soft Gradient & Glassmorphism)
+# Kustomisasi CSS untuk Latar Belakang Modern Premium & Tombol Breadcrumbs
 st.markdown("""
     <style>
     /* Mengubah background utama aplikasi */
@@ -33,11 +34,27 @@ st.markdown("""
         box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
     }
     
-    .breadcrumbs { 
-        font-size: 14px; 
-        color: #555; 
-        margin-bottom: 12px; 
-        font-weight: 500;
+    /* Mengubah Gaya Tombol agar Terlihat Seperti Teks Link Biasa (Breadcrumbs) */
+    .stButton > button {
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        color: #2e7d32 !important;
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+    }
+    .stButton > button:hover {
+        color: #1b5e20 !important;
+        text-decoration: underline !important;
+    }
+    
+    .breadcrumbs-separator {
+        font-size: 14px;
+        color: #555;
+        margin: 0 8px;
+        font-weight: bold;
     }
     
     .main-headline { 
@@ -86,6 +103,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Inisialisasi State Halaman untuk Navigasi Interaktif
+if "halaman_aktif" not  in st.session_state:
+    st.session_state.halaman_aktif = "inovasi"
+
 # 1. Spanduk Utama Atas (Header Banner)
 st.markdown("""
     <div class="header-banner">
@@ -94,86 +115,104 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# 2. Breadcrumbs (Navigasi Jejak Halaman)
-st.markdown('<div class="breadcrumbs">Beranda &gt; Berita &gt; Inovasi Teknologi Lingkungan</div>', unsafe_allow_html=True)
+# 2. Tombol Navigasi Breadcrumbs yang Bisa Diklik Langsung
+b_kol1, b_kol2, b_kol3, b_kol4, _ = st.columns([0.08, 0.06, 0.22, 0.02, 0.62])
 
-# 3. Judul Utama Berita (Main Headline)
-st.markdown('<div class="main-headline">Apresiasi Inovasi Pelayanan Sosial Lingkungan, Desa Bojongpicung Luncurkan Sayembara Penanganan Sampah Organik Terbaik Berbasis Komputer Vision</div>', unsafe_allow_html=True)
+with b_kol1:
+    if st.button("Beranda"):
+        st.session_state.halaman_aktif = "beranda"
+with b_kol2:
+    st.markdown('<span class="breadcrumbs-separator">&gt; Berita</span>', unsafe_allow_html=True)
+with b_kol3:
+    if st.button("Inovasi Teknologi Lingkungan"):
+        st.session_state.halaman_aktif = "inovasi"
+with b_kol4:
+    st.markdown('<br>', unsafe_allow_html=True)
 
-# 4. Informasi Meta (Tanggal, Penulis, & Perubahan ke NPM)
-st.markdown("""
-    <div class="meta-info">
-        📅 <b>Jumat, 12 Juni 2026</b> &nbsp;|&nbsp; 🧑‍💻 <b>Penulis:</b> Tiara Putri Latifani Dianata (NPM: 20221310086) &nbsp;|&nbsp; 📍 <b>Lokasi:</b> Kp. Rawabebek RT.002/RW.001, Kab. Cianjur
-    </div>
-""", unsafe_allow_html=True)
+# Logika Pengalihan Tampilan Konten Berdasarkan Klik Navigasi
+if st.session_state.halaman_aktif == "beranda":
+    st.markdown('<div class="main-headline">Selamat Datang di Beranda Utama Portal Gapura Bojongpicung</div>', unsafe_allow_html=True)
+    st.info("Gunakan menu navigasi 'Inovasi Teknologi Lingkungan' di bagian atas untuk mengakses alat monitoring volume sampah.")
 
-# 5. Konten Narasi / Ringkasan Publikasi (Glassmorphism Card)
-st.markdown("""
-    <div class="news-card">
-        <h4 style="margin-top:0; color:#1b5e20; font-weight:700; font-size:18px;">📝 Ringkasan Publikasi Inovasi</h4>
-        <p>Dalam rangka memperingati momentum akselerasi kebersihan lingkungan, komunitas penggerak lingkungan <b>Kp. Rawabebek RT.002 / RW.001, Desa Bojongpicung, Kabupaten Cianjur</b> secara resmi mengintegrasikan sistem pemantauan kuantitatif tumpukan sampah domestik. Langkah taktis ini diambil guna mendorong partisipasi aktif warga dalam optimalisasi pengelolaan pupuk kompos mandiri.</p>
-        <p style="margin-bottom:0;">Sebagai bentuk implementasi nyata di lapangan, instrumen cerdas di bawah ini disediakan khusus untuk mempermudah warga dan kader lingkungan dalam mendeteksi jenis sampah organik serta menghitung estimasi volume ruang secara instan menggunakan metode <i>OpenCV Edge Detection</i>.</p>
-    </div>
-""", unsafe_allow_html=True)
+else:
+    # Tampilan Halaman Inovasi (Judul Baru Tanpa 'Sayembara' dan 'Terbaik')
+    st.markdown('<div class="main-headline">Apresiasi Inovasi Pelayanan Sosial Lingkungan, Desa Bojongpicung Luncurkan Penanganan Sampah Organik Berbasis Komputer Vision</div>', unsafe_allow_html=True)
 
-st.markdown("<br>", unsafe_allow_html=True)
+    # 4. Informasi Meta Terintegrasi NPM
+    st.markdown("""
+        <div class="meta-info">
+            📅 <b>Jumat, 12 Juni 2026</b> &nbsp;|&nbsp; 🧑‍💻 <b>Penulis:</b> Tiara Putri Latifani Dianata (NPM: 20221310086) &nbsp;|&nbsp; 📍 <b>Lokasi:</b> Kp. Rawabebek RT.002/RW.001, Kab. Cianjur &nbsp;|&nbsp; 🌐 <b>URL:</b> monitoring-sampah-tiara.streamlit.app
+        </div>
+    """, unsafe_allow_html=True)
 
-# ==========================================
-# 2. KONTROL SISTEM (SIDEBAR)
-# ==========================================
-st.sidebar.header("⚙️ Kontrol Sistem Portal")
-st.sidebar.success("✅ OpenCV Engine Berhasil Dimuat.")
+    # 5. Konten Profil Desa & Deskripsi Riset (Glassmorphism Card)
+    st.markdown("""
+        <div class="news-card">
+            <h4 style="margin-top:0; color:#1b5e20; font-weight:700; font-size:18px;">📝 Informasi Penelitian & Lokasi Praktek Lapangan</h4>
+            <p>Dalam rangka memperingati momentum akselerasi kebersihan lingkungan, komunitas penggerak lingkungan bersama masyarakat <b>Kp. Rawabebek RT.002 / RW.001, Desa Bojongpicung, Kecamatan Bojongpicung, Kabupaten Cianjur</b> secara resmi mengintegrasikan sistem pemantauan kuantitatif tumpukan sampah domestik. Langkah taktis ini diambil guna mendorong partisipasi aktif warga dalam optimalisasi pengelolaan pupuk kompos mandiri.</p>
+            <p style="margin-bottom:0;">Sebagai bentuk implementasi nyata di lapangan, instrumen cerdas di bawah ini disediakan khusus untuk mempermudah warga dan kader lingkungan dalam mendeteksi jenis sampah organik serta menghitung estimasi volume ruang secara instan menggunakan metode <i>OpenCV Edge Detection</i>.</p>
+        </div>
+    """, unsafe_allow_html=True)
 
-st.sidebar.subheader("📐 Kalibrasi Geometri Objek")
-piksel_per_cm = st.sidebar.slider("Rasio Rasio (Piksel/Cm):", min_value=1.0, max_value=50.0, value=10.0, step=0.5)
-kedalaman_wadah = st.sidebar.number_input("Tinggi/Kedalaman Wadah Kompos (cm):", min_value=1.0, value=50.0)
+    st.markdown("<br>", unsafe_allow_html=True)
 
-# ==========================================
-# 3. FUNGSI DETEKSI & KALKULASI MATEMATIS
-# ==========================================
-def proses_klasifikasi():
-    DAFTAR_KELAS = ["Daun Kering", "Sisa Sayuran", "Kulit Buah", "Ranting Pohon"]
-    return np.random.choice(DAFTAR_KELAS), np.random.uniform(85.0, 99.8)
+    # ==========================================
+    # SIDEBAR KONTROL
+    # ==========================================
+    st.sidebar.header("⚙️ Kontrol Sistem Portal")
+    st.sidebar.success("✅ OpenCV Engine Berhasil Dimuat.")
 
-def estimasi_dimensi_dan_volume(img_pil, p_per_cm, tinggi_wadah):
-    open_cv_image = np.array(img_pil)
-    open_cv_image = cv2.cvtColor(open_cv_image, cv2.COLOR_RGB2BGR)
-    
-    gray = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(gray, (5, 5), 0)
-    _, thresh = cv2.threshold(blur, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-    kontur, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    
-    panjang_cm, lebar_cm, volume_m3 = 0.0, 0.0, 0.0
-    
-    if kontur:
-        kontur_terbesar = max(kontur, key=cv2.contourArea)
-        x, y, w, h = cv2.boundingRect(kontur_terbesar)
-        cv2.rectangle(open_cv_image, (x, y), (x + w, y + h), (0, 255, 0), 3)
-        panjang_cm = w / p_per_cm
-        lebar_cm = h / p_per_cm
-        volume_m3 = (panjang_cm * lebar_cm * tinggi_wadah) / 1000000.0
+    st.sidebar.subheader("📐 Kalibrasi Geometri Objek")
+    piksel_per_cm = st.sidebar.slider("Rasio Rasio (Piksel/Cm):", min_value=1.0, max_value=50.0, value=10.0, step=0.5)
+    kedalaman_wadah = st.sidebar.number_input("Tinggi/Kedalaman Wadah Kompos (cm):", min_value=1.0, value=50.0)
+
+    # ==========================================
+    # FUNGSI DETEKSI & KALKULASI MATEMATIS
+    # ==========================================
+    def proses_klasifikasi():
+        DAFTAR_KELAS = ["Daun Kering", "Sisa Sayuran", "Kulit Buah", "Ranting Pohon"]
+        hasil = random.choice(DAFTAR_KELAS)
+        akurasi = random.uniform(85.0, 99.8)
+        return hasil, akurasi
+
+    def estimasi_dimensi_dan_volume(img_pil, p_per_cm, tinggi_wadah):
+        open_cv_image = np.array(img_pil)
+        open_cv_image = cv2.cvtColor(open_cv_image, cv2.COLOR_RGB2BGR)
         
-    result_img = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGB)
-    return result_img, panjang_cm, lebar_cm, volume_m3
+        gray = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2GRAY)
+        blur = cv2.GaussianBlur(gray, (5, 5), 0)
+        _, thresh = cv2.threshold(blur, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+        kontur, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        panjang_cm, lebar_cm, volume_m3 = 0.0, 0.0, 0.0
+        
+        if kontur:
+            kontur_terbesar = max(kontur, key=cv2.contourArea)
+            x, y, w, h = cv2.boundingRect(kontur_terbesar)
+            cv2.rectangle(open_cv_image, (x, y), (x + w, y + h), (0, 255, 0), 3)
+            panjang_cm = w / p_per_cm
+            lebar_cm = h / p_per_cm
+            volume_m3 = (panjang_cm * lebar_cm * tinggi_wadah) / 1000000.0
+            
+        result_img = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGB)
+        return result_img, panjang_cm, lebar_cm, volume_m3
 
-# ==========================================
-# 4. KOMPONEN UTAMA SISTEM INTERAKTIF
-# ==========================================
-kolom_kiri, kolom_kanan = st.columns(2)
+    # ==========================================
+    # KOMPONEN UTAMA SISTEM INTERAKTIF
+    # ==========================================
+    kolom_kiri, kolom_kanan = st.columns(2)
 
-with kolom_kiri:
-    st.markdown('<div class="section-card"><h3>📷 Panel Input Citra Lapangan</h3></div>', unsafe_allow_html=True)
-    file_unggah = st.file_uploader("Unggah dokumen citra tumpukan sampah untuk diverifikasi...", type=["jpg", "jpeg", "png", "JPG", "JPEG", "PNG"])
-    
-    if file_unggah is not None:
-        citra_asli = Image.open(file_unggah)
-        st.image(citra_asli, caption="Citra Sumber dari Lapangan", use_container_width=True)
+    with kolom_kiri:
+        st.markdown('<div class="section-card"><h3>📷 Panel Input Citra Lapangan</h3></div>', unsafe_allow_html=True)
+        file_unggah = st.file_uploader("Unggah dokumen citra tumpukan sampah untuk diverifikasi...", type=["jpg", "jpeg", "png", "JPG", "JPEG", "PNG"])
+        
+        if file_unggah is not None:
+            citra_asli = Image.open(file_unggah)
+            st.image(citra_asli, caption="Citra Sumber dari Lapangan", use_container_width=True)
 
 with kolom_kanan:
-    st.markdown('<div class="section-card"><h3>📊 Validasi Data & Metrik Volume</h3></div>', unsafe_allow_html=True)
-    
-    if file_unggah is not None:
+    if file_unggah is not None and st.session_state.halaman_aktif == "inovasi":
+        st.markdown('<div class="section-card"><h3>📊 Validasi Data & Metrik Volume</h3></div>', unsafe_allow_html=True)
         hasil_kelas, akurasi = proses_klasifikasi()
         citra_proses, p_cm, l_cm, vol_hitung = estimasi_dimensi_dan_volume(citra_asli, piksel_per_cm, kedalaman_wadah)
         
@@ -190,9 +229,3 @@ with kolom_kanan:
         
         st.subheader("3. Instruksi Penanganan Kompos Mandiri")
         if hasil_kelas in ["Daun Kering", "Ranting Pohon"]:
-            st.info("💡 **Rekomendasi Teknis:** Komponen kaya unsur Karbon (C). Diperlukan tambahan material basah kaya Nitrogen untuk menyeimbangkan rasio C/N.")
-        else:
-            st.info("💡 **Rekomendasi Teknis:** Komponen kaya unsur Nitrogen (N). Pastikan sirkulasi udara optimal guna mencegah timbulnya kondisi anaerobik berbau.")
-    else:
-        st.info("Sistem siap menerima unggahan data citra dari Grandmaster untuk memulai kalkulasi matematis.")
-        
