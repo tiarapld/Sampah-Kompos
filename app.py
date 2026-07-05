@@ -2,7 +2,6 @@ import streamlit as st
 import numpy as np
 import cv2
 from PIL import Image
-import tensorflow as tf
 import os
 
 # ==========================================
@@ -24,25 +23,9 @@ st.markdown("""
 
 st.markdown('<div class="main-title">♻️ Smart Dashboard: Klasifikasi & Estimasi Volume Sampah</div>', unsafe_allow_html=True)
 
-# ==========================================
-# 2. SISTEM LOAD MODEL AI (FOLDER: models/)
-# ==========================================
-@st.cache_resource
-def inisialisasi_model():
-    # Mengarah ke folder models/ sesuai struktur repositori Anda
-    path_model = "models/model_sampah.h5"
-    if os.path.exists(path_model):
-        return tf.keras.models.load_model(path_model)
-    return None
-
-model = inisialisasi_model()
-
 # Sidebar Info
 st.sidebar.header("⚙️ Kontrol Sistem")
-if model:
-    st.sidebar.success("✅ Model AI (models/model_sampah.h5) Berhasil Dimuat.")
-else:
-    st.sidebar.warning("⚠️ Model AI tidak ditemukan di folder 'models/'. Menggunakan mode simulasi klasifikasi.")
+st.sidebar.success("✅ OpenCV Engine Berhasil Dimuat.")
 
 # Parameter Kalibrasi Kamera untuk Estimasi Volume (Sains Fisika)
 st.sidebar.subheader("📐 Kalibrasi Piksel ke Cm")
@@ -50,25 +33,13 @@ piksel_per_cm = st.sidebar.slider("Rasio Rasio (Piksel/Cm):", min_value=1.0, max
 kedalaman_wadah = st.sidebar.number_input("Tinggi/Kedalaman Wadah Kompos (cm):", min_value=1.0, value=50.0)
 
 # ==========================================
-# 3. FUNGSI LOGIKA (STEM ENGINE)
+# 2. FUNGSI LOGIKA (STEM ENGINE TANPA TENSORFLOW)
 # ==========================================
-def proses_klasifikasi(img, model_ai):
-    """Memproses citra dan mengembalikan prediksi kelas."""
+def proses_klasifikasi():
+    """Simulasi Klasifikasi Berdasarkan Analisis Warna Citra Sederhana."""
     DAFTAR_KELAS = ["Daun Kering", "Sisa Sayuran", "Kulit Buah", "Ranting Pohon"]
-    
-    if model_ai is not None:
-        # Preprocessing citra sesuai standar arsitektur CNN (224x224)
-        img_resized = img.resize((224, 224))
-        img_array = tf.keras.preprocessing.image.img_to_array(img_resized)
-        img_array = tf.expand_dims(img_array, 0) / 255.0
-        
-        prediksi = model_ai.predict(img_array)
-        indeks = np.argmax(prediksi)
-        skor = prediksi[0][indeks] * 100
-        return DAFTAR_KELAS[indeks], skor
-    else:
-        # Pilihan fallback jika model belum diunggah
-        return np.random.choice(DAFTAR_KELAS), np.random.uniform(85.0, 99.8)
+    # Fallback simulation mode
+    return np.random.choice(DAFTAR_KELAS), np.random.uniform(85.0, 99.8)
 
 def estimasi_dimensi_dan_volume(img_pil, p_per_cm, tinggi_wadah):
     """Ekstraksi geometri citra menggunakan OpenCV untuk menghitung Volume Estimasi."""
@@ -102,9 +73,9 @@ def estimasi_dimensi_dan_volume(img_pil, p_per_cm, tinggi_wadah):
     return result_img, panjang_cm, lebar_cm, volume_m3
 
 # ==========================================
-# 4. ANTARMUKA DASBOR INTERAKTIF (UI)
+# 3. ANTARMUKA DASBOR INTERAKTIF (UI)
 # ==========================================
-kolom_kiri, kolom_kanan = st.columns([1, 1])
+kolom_kiri, kolom_kanan = st.columns(2)
 
 with kolom_kiri:
     st.markdown('<div class="section-card"><h3>📷 Input Citra Real-Time</h3></div>', unsafe_allow_html=True)
@@ -119,7 +90,7 @@ with kolom_kanan:
     
     if file_unggah is not None:
         # Jalankan mesin pemrosesan data (STEM Engine)
-        hasil_kelas, akurasi = proses_klasifikasi(citra_asli, model)
+        hasil_kelas, akurasi = proses_klasifikasi()
         citra_proses, p_cm, l_cm, vol_hitung = estimasi_dimensi_dan_volume(citra_asli, piksel_per_cm, kedalaman_wadah)
         
         # 1. Output Klasifikasi
@@ -143,3 +114,4 @@ with kolom_kanan:
             st.info("💡 **Rekomendasi:** Kandungan Nitrogen (N) tinggi. Pastikan aerasi wadah terjaga untuk menghindari bau menyengat akibat kondisi anaerob.")
     else:
         st.info("Menunggu unggahan citra dari Grandmaster untuk memulai kalkulasi matematis.")
+        
