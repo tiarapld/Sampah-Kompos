@@ -27,5 +27,30 @@ Sistem ini diimplementasikan ke dalam bentuk aplikasi berbasis web agar mudah di
 ├── static/                # Aset statis web (CSS, JS, Gambar)
 ├── templates/             # File HTML untuk antarmuka web (Flask/Django)
 ├── app.py                 # File utama aplikasi web (Backend)
+
+# 📍 Laporan Implementasi Sistem & Lokasi Praktek Lapangan
+
+## 1. Identitas Peneliti dan Mitra
+* **Penyusun / Peneliti:** Tiara Putri Latifani Dianata  
+* **Nomor Induk Mahasiswa (NIM):** 20221310086  
+* **Judul Penelitian:** Implementasi Convolutional Neural Network untuk Klasifikasi Jenis dan Estimasi Volume Sampah Organik sebagai Pendukung Pengelolaan Kompos  
+* **Lokasi Praktek / Studi Kasus:** Desa [Masukkan Nama Desa], Kecamatan [Masukkan Kecamatan], Kabupaten [Masukkan Kabupaten]  
+* **Mitra Lapangan:** [Masukkan nama instansi, misal: TPS3R Desa / Kelompok Tani / Karang Taruna]  
+
+---
+
+## 2. Latar Belakang dan Konteks Wilayah
+Penelitian ini didasarkan pada permasalahan pengelolaan sampah domestik di lokasi praktek, di mana tumpukan sampah organik rumah tangga belum terdata secara kuantitatif. Kurangnya pencatatan volume harian menghambat optimalisasi pasokan bahan baku pada bak pengomposan. 
+
+Sistem monitoring berbasis web Streamlit ini diimplementasikan untuk mendigitalisasi proses tersebut, memberikan estimasi volume riil tumpukan sampah secara instan guna mendukung efisiensi produksi pupuk organik desa.
+
+---
+
+## 3. Spesifikasi Teknis Alat di Lapangan
+Untuk menyinkronkan perhitungan kuantitatif pada aplikasi web dengan kondisi fisik di lokasi desa praktek, digunakan parameter kalibrasi tetap sebagai berikut:
+* **Dimensi Wadah Kompos Eksisting:** Panjang x Lebar x Tinggi Wadah (Kedalaman) disesuaikan melalui panel kontrol aplikasi web.
+* **Instrumen Pengambilan Citra:** Kamera Smartphone / Kamera Pemantau IoT statis dengan sudut pandang tegak lurus (*Top-down View*) terhadap tumpukan sampah.
+* **Konstanta Densitas Sampah Organik Desa:** $\approx 154,93 \text{ kg/m}^3$ (Merujuk standar empiris tata kota untuk konversi volume ke estimasi massa total boks).
+*
 ├── requirements.txt       # Daftar library/dependensi Python
 └── README.md              # Dokumentasi proyek
